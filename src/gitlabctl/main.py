@@ -28,6 +28,10 @@ __license__ = "mit"
 _logger = logging.getLogger(__name__)
 
 
+def project(args):
+    _logger.debug("sono in project")
+
+
 def parse_args(args):
     """Parse command line parameters
 
@@ -61,8 +65,8 @@ def parse_args(args):
 
     project_parser = subparsers.add_parser(
         'project', help='interact with projects')
-    project_parser.add_argument('get-env', type=int, help='get-env help')
-
+    project_parser.add_argument('get-env', help='get-env help')
+    project_parser.set_defaults(func=project)
     return root_parser.parse_args(args)
 
 
@@ -85,6 +89,7 @@ def main(args):
     """
     args = parse_args(args)
     setup_logging(args.loglevel)
+    args.func(args)
     _logger.info("Gitlabctl ends here")
 
 
