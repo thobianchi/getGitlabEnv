@@ -37,27 +37,33 @@ def parse_args(args):
     Returns:
       :obj:`argparse.Namespace`: command line parameters namespace
     """
-    parser = argparse.ArgumentParser(
+    root_parser = argparse.ArgumentParser(
         description="Gitlab CLI Application")
-    parser.add_argument(
+    subparsers = root_parser.add_subparsers(title="actions")
+    root_parser.add_argument(
         "--version",
         action="version",
         version="gitlabctl {ver}".format(ver=__version__))
-    parser.add_argument(
+    root_parser.add_argument(
         "-v",
         "--verbose",
         dest="loglevel",
         help="set loglevel to INFO",
         action="store_const",
         const=logging.INFO)
-    parser.add_argument(
+    root_parser.add_argument(
         "-vv",
         "--very-verbose",
         dest="loglevel",
         help="set loglevel to DEBUG",
         action="store_const",
         const=logging.DEBUG)
-    return parser.parse_args(args)
+
+    project_parser = subparsers.add_parser(
+        'project', help='interact with projects')
+    project_parser.add_argument('get-env', type=int, help='get-env help')
+
+    return root_parser.parse_args(args)
 
 
 def setup_logging(loglevel):
