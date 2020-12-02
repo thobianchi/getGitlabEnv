@@ -22,3 +22,11 @@ def save(filepath, config_dict):
     }
     with open(filepath, 'w') as configfile:
         config.write(configfile)
+
+
+def read(filepath, section_name):
+    config.read(filepath)
+    config_dict = {"name": section_name, "url": config[section_name]["url"],
+                   "token": config[section_name]["token"]}
+    _logger.debug("config_dict: {}".format(config_dict))
+    return config_dict
