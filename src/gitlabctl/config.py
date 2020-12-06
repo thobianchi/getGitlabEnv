@@ -14,25 +14,17 @@ CONFIG_NAME = "gitlabctl.ini"
 _logger = logging.getLogger(__name__)
 
 
-class Singleton(type):
-    _instances = {}
-
-    def __call__(cls, *args, **kwargs):
-        if cls not in cls._instances:
-            cls._instances[cls] = super(Singleton, cls). \
-                __call__(*args, **kwargs)
-        return cls._instances[cls]
-
-
-class Config(metaclass=Singleton):
-    def __init__(self, filepath=Path.joinpath(CONFIG_PATH, CONFIG_NAME)):
-        self.filepath = filepath
+class Config(object):
+    def __init__(self):
+        self.filepath = Path.joinpath(CONFIG_PATH, CONFIG_NAME)
         self.config = configparser.ConfigParser()
+
+    def set_filepath(self, filepath):
+        self.filepath = filepath
         self._read(filepath)
 
     def _read(self, filepath):
         self.config.read(filepath)
-        return self.config
 
     def save(self):
         with open(self.filepath, 'w') as configfile:
@@ -54,8 +46,14 @@ class Config(metaclass=Singleton):
                     }
         return None
 
+    def get_contexts(self):
+        return self.config.sections()
+
     def set_context(self, context, url, token):
         self.config[context] = {
                                 'url': url,
                                 'token': token
                                 }
+
+
+config = Config()
