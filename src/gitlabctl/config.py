@@ -9,7 +9,7 @@ __copyright__ = "Thomas Bianchi"
 __license__ = "mit"
 
 CONFIG_PATH = Path.home()
-CONFIG_NAME = "gitlabctl.ini"
+CONFIG_NAME = ".gitlabctl.ini"
 
 _logger = logging.getLogger(__name__)
 
@@ -18,6 +18,7 @@ class Config(object):
     def __init__(self):
         self.filepath = Path.joinpath(CONFIG_PATH, CONFIG_NAME)
         self.config = configparser.ConfigParser()
+        self._read(self.filepath)
 
     def set_filepath(self, filepath):
         self.filepath = filepath

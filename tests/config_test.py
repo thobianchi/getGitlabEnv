@@ -41,7 +41,7 @@ current-context = gitTools
 
 
 def write_config_example(tmp_path, content):
-    config_file = Path.joinpath(tmp_path, "gitlabctl.ini")
+    config_file = Path.joinpath(tmp_path, ".gitlabctl.ini")
     with open(config_file, "w") as f:
         f.write(content)
     return config_file
@@ -81,7 +81,7 @@ def test_read_config(tmp_path, a, expected):
 def test_set_context(tmp_path):
     # Re-Init config otherwise one tests collides
     config.config = configparser.ConfigParser()
-    config.set_filepath(Path.joinpath(tmp_path, "gitlabctl.ini"))
+    config.set_filepath(Path.joinpath(tmp_path, ".gitlabctl.ini"))
     config.set_context('testSet', 'https://lll', 'eeeee')
     assert 'testSet' in config.config.sections()
     assert config.config['testSet']['url'] == 'https://lll'
@@ -91,7 +91,7 @@ def test_set_context(tmp_path):
 def test_set_current_context(tmp_path):
     # Re-Init config otherwise one tests collides
     config.config = configparser.ConfigParser()
-    config.set_filepath(Path.joinpath(tmp_path, "gitlabctl.ini"))
+    config.set_filepath(Path.joinpath(tmp_path, ".gitlabctl.ini"))
     config.set_current_context('currcontextA')
     assert config._get_current_context() == 'currcontextA'
     assert config.config['DEFAULT']['current-context'] == 'currcontextA'
@@ -105,7 +105,7 @@ def test_not_existing(tmp_path):
 
 
 def test_save(tmp_path):
-    test_file = Path.joinpath(tmp_path, "gitlabctl.ini")
+    test_file = Path.joinpath(tmp_path, ".gitlabctl.ini")
     # Re-Init config otherwise one tests collides
     config.config = configparser.ConfigParser()
     config.set_filepath(test_file)
