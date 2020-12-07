@@ -10,9 +10,11 @@ PERPAGEOPT = 50
 
 
 class Gitlab_client(object):
-    def __init__(self, url, token):
+    def __init__(self, url="", token=""):
         self.gl = gitlab.Gitlab(url, private_token=token, per_page=PERPAGEOPT)
 
-    def get_project_env(self, id):
-        project = self.gl.projects.get(id)
-        return project.variables.list()
+    def get_project_by_id(self, id):
+        return self.gl.projects.get(id)
+
+    def get_group_by_id(self, id):
+        return self.gl.groups.get(id)
