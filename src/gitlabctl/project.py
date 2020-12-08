@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 
+import os
+import tempfile
+
 __author__ = "Thomas Bianchi"
 __copyright__ = "Thomas Bianchi"
 __license__ = "mit"
@@ -34,5 +37,28 @@ def get_variable_list(client, id):
     return variables
 
 
+def create_temp_file(value):
+    fd, f_name = tempfile.mkstemp(prefix="gitlabctl.")
+    with os.fdopen(fd, 'w') as fdfile:
+        fdfile.write(value)
+    return f_name
+
+
+def create_export_string(key, value):
+    return "export {}='{}'".format(key, value)
+
+
+def format_variables(vars_list):
+    variables = []
+    for v in vars_list:
+        if v.variable_type == "file":
+            tmp_file = create_temp_file(v.value)
+            variables.append(create_export_string(v.key, tmp_file))
+        else:
+            variables.append(create_export_string(v.key, v.value))
+    return variables
+
+
 def get_env(client, id):
-    print(get_variable_list(client, id))
+    vars = get_variable_list(client, id)
+    return format_variables(vars)

@@ -23,7 +23,7 @@ class Gitlab_client(object):
         """
         Given a project or group object return a list of all env vars
         """
-        return prjgrp.variables.list()
+        return prjgrp.variables.list(as_list=False)
 
     def get_instance_vars(self):
-        return self.gl.variables.list()
+        return self.gl.variables.list(as_list=False)

@@ -33,4 +33,6 @@ def project_get_env(id):
     """
     cfg = config.get_config()
     client = Gitlab_client(cfg['url'], cfg['token'])
-    gitlab_project.get_env(client, id)
+    vars = gitlab_project.get_env(client, id)
+    for v in vars:
+        click.echo(v)
