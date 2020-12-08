@@ -21,7 +21,18 @@ def get_all_parents_ids(client, id):
     return ids
 
 
-def get_env(client, id):
-    # client.get_project_env(id)
+# get all vars
+def get_variable_list(client, id):
+    variables = []
+    proj = client.get_project_by_id(id)
+    variables.extend(client.get_environemnt_vars(proj))
     ids = get_all_parents_ids(client, id)
-    print("ids", ids)
+    for id in ids:
+        grp = client.get_group_by_id(id)
+        variables.extend(client.get_environemnt_vars(grp))
+    variables.extend(client.get_instance_vars())
+    return variables
+
+
+def get_env(client, id):
+    print(get_variable_list(client, id))

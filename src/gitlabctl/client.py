@@ -18,3 +18,12 @@ class Gitlab_client(object):
 
     def get_group_by_id(self, id):
         return self.gl.groups.get(id)
+
+    def get_environemnt_vars(self, prjgrp):
+        """
+        Given a project or group object return a list of all env vars
+        """
+        return prjgrp.variables.list()
+
+    def get_instance_vars(self):
+        return self.gl.variables.list()
