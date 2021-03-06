@@ -29,4 +29,4 @@ class Gitlab_client(object):
         return self.gl.variables.list(as_list=False)
 
     def search_project(self, keyword):
-        return self.gl.projects.list(search=keyword)
+        return self.gl.projects.list(search=keyword, as_list=False)

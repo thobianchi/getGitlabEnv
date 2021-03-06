@@ -5,6 +5,8 @@ import subprocess
 import sys
 import tempfile
 
+from iterfzf import iterfzf
+
 __author__ = "Thomas Bianchi"
 __copyright__ = "Thomas Bianchi"
 __license__ = "mit"
@@ -61,11 +63,13 @@ def format_variables(vars_list):
     return variables
 
 
-def multiple_projects_found(search_list):
+def yield_project_with_ns(search_list):
     for proj in search_list:
-        print("id: {}, name_with_namespace: {}".format(proj.id,
-                                                       proj.name_with_namespace))
-    sys.exit(1)
+        yield "{} {}".format(proj.id, proj.name_with_namespace)
+
+
+def multiple_projects_found(search_list):
+    return iterfzf(yield_project_with_ns(search_list)).split(" ")[0]
 
 
 def get_project_id_from_git_remote(client):
@@ -79,7 +83,7 @@ def get_project_id_from_git_remote(client):
     if len(search_list) == 1:
         return search_list[0].id
     else:
-        multiple_projects_found(search_list)
+        return multiple_projects_found(search_list)
 
 
 def get_env(client, id):
