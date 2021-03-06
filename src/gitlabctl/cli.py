@@ -26,13 +26,13 @@ def project():
 
 
 @project.command("get-env")
-@click.argument("id", type=int)
-def project_get_env(id):
+@click.option("--by-id", type=int)
+def project_get_env(by_id):
     """
     Get project and anchestor environemnt and print export statements.
     """
     cfg = config.get_config()
     client = Gitlab_client(cfg['url'], cfg['token'])
-    vars = gitlab_project.get_env(client, id)
+    vars = gitlab_project.get_env(client, by_id)
     for v in vars:
         click.echo(v)

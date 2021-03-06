@@ -27,3 +27,6 @@ class Gitlab_client(object):
 
     def get_instance_vars(self):
         return self.gl.variables.list(as_list=False)
+
+    def search_project(self, keyword):
+        return self.gl.projects.list(search=keyword)

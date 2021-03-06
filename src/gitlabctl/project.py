@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import os
+import subprocess
+import sys
 import tempfile
 
 __author__ = "Thomas Bianchi"
@@ -59,6 +61,29 @@ def format_variables(vars_list):
     return variables
 
 
+def multiple_projects_found(search_list):
+    for proj in search_list:
+        print("id: {}, name_with_namespace: {}".format(proj.id,
+                                                       proj.name_with_namespace))
+    sys.exit(1)
+
+
+def get_project_id_from_git_remote(client):
+    run = subprocess.run(["git", "config", "--get", "remote.origin.url"],
+                         capture_output=True, text=True)
+    if not run.stdout:
+        print("Remote not found")
+        sys.exit(1)
+    repo_name = run.stdout.split("/")[-1].split(".")[0]
+    search_list = client.search_project(repo_name)
+    if len(search_list) == 1:
+        return search_list[0].id
+    else:
+        multiple_projects_found(search_list)
+
+
 def get_env(client, id):
+    if not id:
+        id = get_project_id_from_git_remote(client)
     vars = get_variable_list(client, id)
     return format_variables(vars)
